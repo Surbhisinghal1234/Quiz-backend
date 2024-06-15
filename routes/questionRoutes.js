@@ -8,12 +8,14 @@ router.post('/addQuestions', async (req, res) => {
         const { questions } = req.body;
         const savedQuestions = await Quiz.create({ questions });
 
-        console.log("Saved questions:", savedQuestions);
+        console.log("Saved questions", savedQuestions);
         res.json(savedQuestions);
     } catch (error) {
-        console.error('Error saving to database:', error);
+        console.error('Error', error);
         res.status(500).send('Error saving data');
     }
 });
+
+
 
 export default router;

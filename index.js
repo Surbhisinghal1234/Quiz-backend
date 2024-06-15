@@ -7,13 +7,15 @@ import questionRoutes from "./routes/questionRoutes.js";
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 3000;
 
-app.use(cors());
+app.use(cors({ origin: "*" }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/questions", questionRoutes);
+
+
 
 const username = process.env.MONGO_USERNAME;
 const password = encodeURIComponent(process.env.MONGO_PASSWORD);
@@ -23,7 +25,7 @@ mongoose.connect(
     username +
     ":" +
     password +
-     "@cluster0.3j0ywmp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0/attendance"
+    "@cluster0.3j0ywmp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0/attendance"
 )
 .then(() => {
     console.log("MongoDB connected");

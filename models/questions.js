@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const questionSchema = new mongoose.Schema({
     questions: [
         {
@@ -26,5 +27,6 @@ const questionSchema = new mongoose.Schema({
         }
     ]
 });
+
 const Quiz = mongoose.model("questions", questionSchema);
 export default Quiz;
