@@ -1,21 +1,40 @@
 import express from "express";
-import Quiz from "../models/questions.js"; 
+import Question from "../models/questions.js";
 
 const router = express.Router();
 
 router.post('/addQuestions', async (req, res) => {
-    try {
-        const { questions } = req.body;
-        const savedQuestions = await Quiz.create({ questions });
+    const { difficultyLevel, questions } = req.body;
 
-        console.log("Saved questions", savedQuestions);
-        res.json(savedQuestions);
+    if (!difficultyLevel) {
+        return res.status(400).json({ message: "difficultyLevel is required" });
+    }
+
+    try {
+        const newQuestion = new Question({
+            difficultyLevel,
+            questionArray: questions.map(q => ({
+                que: q.que,
+                options: q.options,
+                answer: q.answer,
+                category: q.category
+            }))
+        });
+
+        const savedQuestion = await newQuestion.save();
+        res.status(201).json(savedQuestion);
     } catch (error) {
-        console.error('Error', error);
-        res.status(500).send('Error saving data');
+        res.status(400).json({ message: error.message });
     }
 });
 
-
+router.get('/getQuestions', async (req, res) => {
+    try {
+        const questions = await Question.find();
+        res.status(200).json(questions);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
 
 export default router;

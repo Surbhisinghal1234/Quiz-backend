@@ -1,9 +1,15 @@
 import mongoose from "mongoose";
 
 const questionSchema = new mongoose.Schema({
-    questions: [
+    difficultyLevel: {
+        type: String,
+        enum: ['easy', 'medium', 'hard'],
+        required: true,
+        index: true
+    },
+    questionArray: [
         {
-            question: {
+            que: {
                 type: String,
                 required: true
             },
@@ -18,15 +24,9 @@ const questionSchema = new mongoose.Schema({
             category: {
                 type: String,
                 required: true
-            },
-            difficultyLevel: {
-                type: String,
-                enum: ['easy', 'medium', 'hard'],
-                required: true
             }
         }
     ]
 });
-
-const Quiz = mongoose.model("questions", questionSchema);
-export default Quiz;
+const Question = mongoose.model("Question", questionSchema);
+export default Question;
