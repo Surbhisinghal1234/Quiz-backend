@@ -1,23 +1,23 @@
+
 import express from "express";
 import Question from "../models/questions.js";
 
 const router = express.Router();
 
 router.post('/addQuestions', async (req, res) => {
-    const { difficultyLevel, questions } = req.body;
-
+    const { category, difficultyLevel, questions } = req.body;
     if (!difficultyLevel) {
         return res.status(400).json({ message: "difficultyLevel is required" });
     }
 
     try {
         const newQuestion = new Question({
+            category,
             difficultyLevel,
             questionArray: questions.map(q => ({
                 que: q.que,
                 options: q.options,
-                answer: q.answer,
-                category: q.category
+                answer: q.answer
             }))
         });
 
@@ -28,13 +28,25 @@ router.post('/addQuestions', async (req, res) => {
     }
 });
 
+
 router.get('/getQuestions', async (req, res) => {
+    const { category, difficultyLevel } = req.query;
+
     try {
-        const questions = await Question.find();
+        let query = {};
+
+        if (category) {
+            query.category = category;
+        }
+
+        if (difficultyLevel) {
+            query.difficultyLevel = difficultyLevel;
+        }
+
+        const questions = await Question.find(query);
         res.status(200).json(questions);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 });
-
 export default router;
