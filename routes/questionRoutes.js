@@ -1,34 +1,32 @@
-
 import express from "express";
 import Question from "../models/questions.js";
 
 const router = express.Router();
 
-router.post('/addQuestions', async (req, res) => {
-    const { category, difficultyLevel, questions } = req.body;
-    if (!difficultyLevel) {
-        return res.status(400).json({ message: "difficultyLevel is required" });
-    }
-
+router.post('/addQuestion', async (req, res) => {
     try {
-        const newQuestion = new Question({
+        const { category, difficultyLevel, que, options, answer } = req.body;
+
+        const dataToSave = new Question({
             category,
             difficultyLevel,
-            questionArray: questions.map(q => ({
-                que: q.que,
-                options: q.options,
-                answer: q.answer
-            }))
+            que,
+            options,
+            answer
         });
 
-        const savedQuestion = await newQuestion.save();
-        res.status(201).json(savedQuestion);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
+        console.log(dataToSave, "dataToSave before saving");
+
+        await dataToSave.save();
+
+        console.log(dataToSave, "dataToSave after saving");
+
+        res.send("Question saved successfully");
+    } catch (err) {
+        console.error("Error saving question:", err);
+        res.status(500).send("Failed to save question");
     }
 });
-
-
 router.get('/getQuestions', async (req, res) => {
     const { category, difficultyLevel } = req.query;
 
