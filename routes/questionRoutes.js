@@ -3,48 +3,58 @@ import Question from "../models/questions.js";
 
 const router = express.Router();
 
-router.post('/addQuestion', async (req, res) => {
+router.post('/addQuestions', async (req, res) => {
     try {
-        const { category, difficultyLevel, que, options, answer } = req.body;
+        const questionsToAdd = req.body.questions;
 
-        const dataToSave = new Question({
-            category,
-            difficultyLevel,
-            que,
-            options,
-            answer
+        if (!Array.isArray(questionsToAdd)) {
+            return res.status(400).send();
+        }
+        const savedQuestions = [];
+
+        for (const question of questionsToAdd) {
+            const dataToSave = new Question({
+                category: question.category,
+                difficultyLevel: question.difficultyLevel,
+                que: question.que,
+                options: question.options,
+                answer: question.answer
+            });
+
+            const savedQuestion = await dataToSave.save();
+            savedQuestions.push(savedQuestion);
+        };
+
+        console.log(savedQuestions, "savedQuestions");
+
+        res.status(201).json({
+            message: "Questions saved successfully",
+            questions: savedQuestions
         });
-
-        console.log(dataToSave, "dataToSave before saving");
-
-        await dataToSave.save();
-
-        console.log(dataToSave, "dataToSave after saving");
-
-        res.send("Question saved successfully");
     } catch (err) {
-        console.error("Error saving question:", err);
-        res.status(500).send("Failed to save question");
+        console.log("Error", err);
+        res.status(500).send("Failed");
     }
 });
+
 router.get('/getQuestions', async (req, res) => {
     const { category, difficultyLevel } = req.query;
 
     try {
-        let query = {};
+        let getData = {};
 
         if (category) {
-            query.category = category;
+            getData.category = category;
         }
 
         if (difficultyLevel) {
-            query.difficultyLevel = difficultyLevel;
+            getData.difficultyLevel = difficultyLevel;
         }
 
-        const questions = await Question.find(query);
+        const questions = await Question.find(getData);
         res.status(200).json(questions);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
 });
 export default router;
