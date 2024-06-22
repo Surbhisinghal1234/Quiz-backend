@@ -2,14 +2,15 @@ import express from "express";
 import Question from "../models/questions.js";
 
 const router = express.Router();
+// http://localhost:3000/get_questions/getQuestions?category=S&difficultyLevel=easy
 
 router.post('/addQuestions', async (req, res) => {
     try {
         const questionsToAdd = req.body.questions;
 
-        if (!Array.isArray(questionsToAdd)) {
-            return res.status(400).send();
-        }
+        // if (!Array.isArray(questionsToAdd)) {
+        //     return res.status(400).send();
+        // }
         const savedQuestions = [];
 
         for (const question of questionsToAdd) {

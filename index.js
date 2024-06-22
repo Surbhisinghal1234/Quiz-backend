@@ -21,7 +21,11 @@
     app.use('/get_categories',questionRoutes )
     app.use('/submit_quiz',questionRoutes )
     app.use("/add_category", categoryRoutes);
+    app.use("/get_categories",categoryRoutes )
     app.use("/delete_category",categoryRoutes )
+    app.use("/update_category",categoryRoutes )
+
+
 
     const username = process.env.MONGO_USERNAME;
     const password = encodeURIComponent(process.env.MONGO_PASSWORD);
