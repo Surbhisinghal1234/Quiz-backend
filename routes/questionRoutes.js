@@ -1,16 +1,14 @@
 import express from "express";
 import Question from "../models/questions.js";
+import Category from "../models/category.js"; 
+
 
 const router = express.Router();
-// http://localhost:3000/get_questions/getQuestions?category=S&difficultyLevel=easy
 
 router.post('/addQuestions', async (req, res) => {
     try {
         const questionsToAdd = req.body.questions;
 
-        // if (!Array.isArray(questionsToAdd)) {
-        //     return res.status(400).send();
-        // }
         const savedQuestions = [];
 
         for (const question of questionsToAdd) {
@@ -35,6 +33,17 @@ router.post('/addQuestions', async (req, res) => {
     } catch (err) {
         console.log("Error", err);
         res.status(500).send("Failed");
+    }
+});
+
+// GET CATEGORIES
+router.get('/getCategories', async (req, res) => {
+    try {
+        const categories = await Category.find();
+        res.status(200).json(categories);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: "Server Error" });
     }
 });
 
