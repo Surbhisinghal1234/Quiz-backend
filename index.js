@@ -3,7 +3,7 @@
     import dotenv from "dotenv";
     import cors from "cors";
     import questionRoutes from "./routes/questionRoutes.js"; 
-    import userRoutes from "./routes/userRoutes.js";
+    // import userRoutes from "./routes/userRoutes.js";
     import categoryRoutes from "./routes/categoryRoutes.js";
     import submitRoutes from "./routes/submitRoutes.js";
 
