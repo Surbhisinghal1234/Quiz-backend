@@ -27,7 +27,7 @@ router.post('/addQuestions', async (req, res) => {
         console.log(savedQuestions, "savedQuestions");
 
         res.status(201).json({
-            message: "Questions saved successfully",
+            message: "ssaved successfully",
             questions: savedQuestions
         });
     } catch (err) {
@@ -67,4 +67,10 @@ router.get('/getQuestions', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+
+
+
+
+
+
 export default router;
